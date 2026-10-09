@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  # serg/tasks#1692: pull_request убран намеренно. job ниже идёт на self-hosted
+  # раннере (docker --gpus, sudo), а репозиторий публичный: PR из форка не должен
+  # исполнять код на машине меша. Ручной запуск — только из main.
+  workflow_dispatch:
 
 jobs:
   test-linux-gpu:
+    if: github.ref == 'refs/heads/main'
     runs-on: self-hosted
     strategy:
       fail-fast: false
